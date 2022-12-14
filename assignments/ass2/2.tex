@@ -1,0 +1,27 @@
+\section{Question 2}
+
+\begin{question}
+    Verify that Strang spliting is 2nd order accurate (i.e, it has $3^{\text {rd }}$ order local error) for linear systems of hyperbolic equations $\vec{U}_t+A \vec{U}_x+B \vec{U}_y=0$, where $A$ and $B$ are constant square matrices.
+\end{question}
+
+\begin{answer}
+    \begin{proof}
+        We can write $\vec{U}(x,y,t) = e^{t(-A\partial_x - B\partial_y)}\vec{U}(x,y,0)$. Using the Strang splitting,we could approximate $\vec{U}(x,y,t) = e^{-\frac{1}{2}At\partial x}e^{-Bt\partial y}e^{-\frac{1}{2}Bt\partial x}\vec{U}(x,y,0)$. We want to know what is $e^{t(-A\partial_x - B\partial_y)} - e^{-\frac{1}{2}At\partial x}e^{-Bt\partial y}e^{-\frac{1}{2}Bt\partial x}$.
+        
+        We have:
+        
+        \begin{align}
+            e^{t(-A\partial_x - B\partial_y)} &\defeq I + (-At\partial x - Bt\partial y) + \tfrac{(-At\partial x-Bt\partial y)^2}{2!} + \tfrac{(-At\partial x-Bt\partial y)^3}{3!} + \cdots\\
+            &= I + (-At\partial x - Bt\partial y) + \tfrac{A^2t^2\partial x^2 + ABt^2\partial x \partial y + BA t^2 \partial x \partial y + B^2t^2\partial y^2}{2}\\
+            &- \tfrac{A^3t^3\partial x^3 + 3A^2Bt^3\partial x^2 \partial y + 3AB^2 \partial x \partial y^2 + B^3t^3\partial y^3}{6} + \cdots
+        \end{align}
+        and
+        \begin{align}
+            e^{-\frac{1}{2}At\partial x}e^{-Bt\partial y}e^{-\frac{1}{2}At\partial x} &\defeq (I + (-\tfrac{1}{2}At\partial x) + \tfrac{(-\frac{1}{2}At \partial x)^2}{2!} + \tfrac{(-\frac{1}{2}At \partial x)^3}{3!} + \cdots)\\
+            &\cdot(I + (-Bt\partial y) + \tfrac{(-Bt \partial y)^2}{2!} + \tfrac{(-Bt \partial y)^3}{3!} + \cdots)\\
+            &\cdot(I + (-\tfrac{1}{2}At\partial x) + \tfrac{(-\frac{1}{2}At \partial x)^2}{2!} + \tfrac{(-\frac{1}{2}At \partial x)^3}{3!} + \cdots)\\
+            &= I + (-At\partial x - Bt\partial y) + \tfrac{A^2t^2\partial x^2 + ABt^2\partial x \partial y + BA t^2 \partial x \partial y + B^2t^2\partial y^2}{2} + O(t^3)
+        \end{align}
+        Therefore, $e^{t(-A\partial_x - B\partial_y)} - e^{-\frac{1}{2}At\partial x}e^{-Bt\partial y}e^{-\frac{1}{2}At\partial x} = O(t^3)$. since $e^{-\frac{1}{2}At\partial x}e^{-Bt\partial y}e^{-\frac{1}{2}At\partial x}$ will have a third order term including $ABA$ which does not occur in $e^t(-A\partial x - B\partial y)$. This implies that the splitting creates a $O(t^3)$ difference from the exact solution during the $\Delta t$ step (i.e. the local error is $O(t^3)$). Thus, this yields second order cumulative error.
+    \end{proof}
+\end{answer}

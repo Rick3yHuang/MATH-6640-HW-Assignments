@@ -1,0 +1,44 @@
+\section{Question 5}
+
+\begin{question}
+    Show that the semi-discrete MUSCL scheme is 2nd order accurate for approximating the smooth solution $u$ of the conservation law
+    $$
+    \frac{\partial u}{\partial t}+\frac{\partial f(u)}{\partial x}=0 \text {, }
+    $$
+    where $f$ is a smooth function. To simplify your analysis, the "minmod" function in the MUSCL scheme is replaced by the average of its arguments, and the flux function $F(\cdot, \cdot)$ in the scheme is assumed to be the Lax-Friedrichs flux.
+\end{question}
+
+\begin{answer}
+    \begin{proof}
+        Suppose $U_j^n = \tfrac{1}{\Delta x}\int_{x_j-\frac{1}{2}}^{x_j+\frac{1}{2}}u(x,tn)\,dx$. If we do the Taylor expansion around $x_j$ to this term we have:
+        \begin{equation}
+            \begin{aligned}
+                U_j^n = &u(x_j,t_n) +\tfrac{1}{\Delta x}\int_{x_j-\frac{1}{2}}^{x_j+\frac{1}{2}}\tfrac{\partial u(x,t_n)}{\partial x}(x-x_j)\,dx + \mathcal{O}(\Delta x^2)\\
+                = &u(x_j,t_n) + 0 + \mathcal{O}(\Delta x^2) \; \left(\text{b/c $\int_{x_j-\frac{1}{2}}^{x_j+\frac{1}{2}}\tfrac{\partial u(x,t_n)}{\partial x}(x-x_j)\,dx = 0$ since $\tfrac{\partial u(x,t_n)}{\partial x}(x-x_j)$ is an odd function}\right)\\
+                = &u(x_j,t_n) + \mathcal{O}(\Delta x^2)
+            \end{aligned}
+        \end{equation}
+        
+        Then, if we write out the MUSCL scheme, that is:
+        \begin{equation}
+            U_j^{n+1} = U_j^n - \tfrac{\Delta t}{\Delta x}\left(F_{j+\frac{1}{2}}^n - F_{j-\frac{1}{2}}^n\right)
+        \end{equation}
+        It would be suffice to show that $\tfrac{\Delta t}{\Delta x}\left(F_{j+\frac{1}{2}}^n - F_{j-\frac{1}{2}}^n\right)$ is $2$nd accurate. That means $\left(F_{j+\frac{1}{2}}^n - F_{j-\frac{1}{2}}^n\right)$ has $3$rd order accuracy, which is $F_{j+\frac{1}{2}}^n$ and $F_{j-\frac{1}{2}}^n$ have $2$nd order accuracy.
+        
+        If we expand $F_{j+\frac{1}{2}}^n$ out, we would have:
+        \begin{equation}
+            \begin{aligned}
+                F_{j+\frac{1}{2}}^n = &F\left(\Tilde{U}\left(x_{\left(j+\frac{1}{2}\right)^-}^n\right),\Tilde{U}\left(x_{\left(j+\frac{1}{2}\right)^+}^n\right)\right)\\
+                &= \tfrac{1}{2}\left(f\left(\Tilde{U}\left(x_{\left(j+\frac{1}{2}\right)^-}^n\right)\right) + f\left(\Tilde{U}\left(x_{\left(j+\frac{1}{2}\right)^+}^n\right)\right)\right) + \tfrac{\alpha}{2}\left(\Tilde{U}\left(x_{\left(j+\frac{1}{2}\right)^-}^n\right) - \Tilde{U}\left(x_{\left(j+\frac{1}{2}\right)^+}^n\right)\right)\\
+                &\text{ (by using the Lax-Friedrichs Flux, and $\alpha = \max_{x}\lvert f'(x)\rvert$)}
+            \end{aligned}
+        \end{equation}
+        Using the average as a substitution of the "minmod" function, we could see that
+        \begin{equation}
+            \Tilde{U}(x^n) = U_j^n + \left(\tfrac{\frac{U_{j+1}^n-U_{j}^{n}}{\Delta x} + \frac{U_{j}^n-U_{j-1}^{n}}{\Delta x}}{2}\right)(x-x_j) = U_j^n + \left(\tfrac{U_{j+1}^n-U_{j-1}^{n}}{2\Delta x}\right)(x-x_j)
+        \end{equation}
+        Since we know that $U_j^n$ has $\mathcal{O}(\Delta x^2)$ accuracy and $\tfrac{U_{j+1}^n-U_{j-1}^{n}}{2\Delta x}$ has $\mathcal{O}(\Delta x^2)$ accuracy, then $\Tilde{U}(x^n)$ has $\mathcal{O}(\Delta x^2)$ accuracy. Hence, both $\Tilde{U}\left(x_{\left(j+\frac{1}{2}\right)^-}^n\right)$ and $\Tilde{U}\left(x_{\left(j+\frac{1}{2}\right)^+}^n\right)$ have $\mathcal{O}(\Delta x^2)$ accuracy. Then, $\tfrac{1}{2}\left(f\left(\Tilde{U}\left(x_{\left(j+\frac{1}{2}\right)^-}^n\right)\right) + f\left(\Tilde{U}\left(x_{\left(j+\frac{1}{2}\right)^+}^n\right)\right)\right)$ has second order accuracy. 
+        
+        Also, $\tfrac{\alpha}{2}\left(\Tilde{U}\left(x_{\left(j+\frac{1}{2}\right)^-}^n\right) - \Tilde{U}\left(x_{\left(j+\frac{1}{2}\right)^+}^n\right)\right)$ has at most third order accuracy. Then, $F_{j+\frac{1}{2}}^n$ is dominated by second order accuracy. Similarly, $F_{j-\frac{1}{2}}^n$ also has second order accuracy. Thus, the MUSCL scheme would have second order accuracy ($\mathcal{O}(\Delta x)$).
+    \end{proof}
+\end{answer}

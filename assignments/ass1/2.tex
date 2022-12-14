@@ -1,0 +1,114 @@
+\section{Question 2}
+
+\begin{question}
+    Compute $$\begin{cases}u_t+a u_x=\nu u_{x x}, & t>0, x \in \mathbb{R} \\ u(x, 0)=\sin (2 \pi x), & x \in \mathbb{R}\end{cases}$$ with (1) $a=1, \nu=0.1 ;$ (2) $a=0, \nu=1$. Find the solution at $T=0.1 \text{ and } 0.5$ (final time) with any scheme you wish and with different mesh sizes to see of your numerical results converge or not.
+    
+    [\textbf{Hint}: you may choose one period of the initial data as the computation interval and apply the periodic boundary condition.]
+\end{question}
+
+\subsection{Part (1)}
+
+\begin{answer}
+    I choose to use the following scheme:
+    \begin{equation}
+        \tfrac{U_j^{n+1} - U_j^n}{\Delta t} + \tfrac{U_j^n-U_{j-1}^n}{\Delta x} = \tfrac{0.1(U_{j+1}^n - 2U_j^n + U_{j-1}^n)}{\Delta x^2}.
+    \end{equation}
+    That means
+    \begin{equation}
+        \begin{aligned}
+        &U_j^{n+1} = U_j^n+\tfrac{0.1\Delta t(U_{j+1}^n - 2U_j^n + U_{j-1}^n)}{\Delta x^2}- \tfrac{\Delta t (U_j^n-U_{j-1}^n)}{\Delta x}\\
+        \Rightarrow &U_j^{n+1} = \tfrac{0.1\Delta t}{\Delta x^2}U_{j+1}^n + (1-\tfrac{0.2\Delta t}{\Delta x^2} - \tfrac{\Delta t}{\Delta x})U_j^n + (\tfrac{0.1\Delta t}{\Delta x^2} + \tfrac{\Delta t}{\Delta x})U_{j-1}^n.
+        \end{aligned}
+    \end{equation}
+    First, I want to use the mesh size of $\Delta t = 0.1, \, \Delta x = \tfrac{1}{6}$. 
+    \begin{table}[H]
+\centering
+\begin{adjustbox}{width=\columnwidth,center}
+\begin{tabular}{|c|l|l|l|c|c|c|c|c|c|c|l|l|l|}
+\hline
+\textbf{} & -1/2                   & -1/3                                 & -1/6                                 & 0                   & 1/6                   & 1/3                  & 1/2                  & 2/3                  & 5/6                   & 1                   & 7/6               & 4/3            & 3/2 \\ \hline
+0.5       &                        &                                      &                                      &                     &                       &                      & $0.60971895015$  &                      &                       &                     &                   &                &     \\ \hline
+0.4       &                        &                                      &                                      &                     & $-0.58902784\sqrt{3}$ & $0.10268672\sqrt{3}$ & $-0.1293504\sqrt{3}$ & $0.58902784\sqrt{3}$ & $-0.10268672\sqrt{3}$ &                     &                   &                &     \\ \hline
+0.3       &                        &                                      &                                      & $-0.043776\sqrt{3}$ & $-0.111136\sqrt{3}$   & $-0.161824\sqrt{3}$  & $0.043776\sqrt{3}$   & $0.111136\sqrt{3}$   & $-0.161824\sqrt{3}$   & $-0.043776\sqrt{3}$ &                   &                &     \\ \hline
+0.2       &                        &                                      & $-0.0248\sqrt{3}$                    & $-0.204\sqrt{3}$    & $-0.2368\sqrt{3}$     & $0.0248\sqrt{3}$     & $0.204\sqrt{3}$      & $0.2368\sqrt{3}$     & $-0.0248\sqrt{3}$     & $-0.204\sqrt{3}$    & $-0.2368\sqrt{3}$ &                &     \\ \hline
+0.1       &                        & \multicolumn{1}{c|}{$-0.02\sqrt{3}$} & \multicolumn{1}{c|}{$-0.32\sqrt{3}$} & $-0.3sqrt{3}$       & $0.02\sqrt{3}$        & $0.32\sqrt{3}$       & $0.3\sqrt{3}=0.51961524227$        & $-0.02\sqrt{3}$      & $-0.32\sqrt{3}$       & $-0.3sqrt{3}$       & $0.02\sqrt{3}$    & $0.32\sqrt{3}$ &     \\ \hline
+0         & \multicolumn{1}{c|}{0} & $-0.5\sqrt{3}$                       & $-0.5\sqrt{3}$                       & 0                   & $0.5\sqrt{3}$         & $0.5\sqrt{3}$        & 0                    & $-0.5\sqrt{3}$       & $-0.5\sqrt{3}$        & 0                   & $0.5\sqrt{3}$     & $0.5\sqrt{3}$  & 0   \\ \hline
+\end{tabular}
+\end{adjustbox}
+\caption{Numerical Solution to $u(0.5,0.5)$}
+\label{tab:tab1}
+\end{table}
+Next, I tried the mesh size of $\Delta t = 0.1, \, \Delta x =0.2$.
+\begin{table}[H]
+\centering
+\begin{adjustbox}{width=\columnwidth,center}
+\begin{tabular}{|c|c|c|c|c|c|c|c|c|c|c|c|}
+\hline
+\textbf{} & -0.5 & -0.3             & -0.1             & 0.1             & 0.3             & 0.5              & 0.7              & 0.9              & 1.1              & 1.3             & 1.5 \\ \hline
+0.5       &      &                  &                  &                 &                 & $-0.07390589161$   &                  &                  &                  &                 &     \\ \hline
+0.4       &      &                  &                  &                 & $-0.09423522973$  & $-0.20077164338$   & $-0.01291787727$   &                  &                  &                 &     \\ \hline
+0.3       &      &                  &                  & $-0.12908983876$  & $-0.24509651017$  & $0.01032859733$    & $-0.06779704304$   & $-0.0826573011$    &                  &                 &     \\ \hline
+0.2       &      &                  & $-0.16097843733$   & $-0.35128639907$  & $-0.03342404307$  & $0.07347315653$    & $0.14158651853$    & $-0.49160764175$   & $-0.75538876002$   &                 &     \\ \hline
+0.1       &      & $-0.14694631307$   & $-0.56634607414$   & $-0.20307481014$  & $0.29389262614$   & $0.47552825814$    & $-0.58778525229$   & $-0.86023870029$   & $-0.20307481014$   & -0.44083893921  &     \\ \hline
+0         & 0    & $-0.95105651629$ & $-0.58778525229$ & $0.58778525229$ & $0.95105651629$ & $-0.58778525229$ & $-0.95105651629$ & $-0.58778525229$ & $-0.58778525229$ & $0.95105651629$ & 0   \\ \hline
+\end{tabular}
+\end{adjustbox}
+\caption{Numerical Solution to $u(0.5,0.5)$ with different mesh size}
+\label{tab:tab2}
+\end{table}
+
+From the result above, we could see that the numerical solution converges since it changed from $0.60971895015$ to $-0.07390589161$ as $\tfrac{\Delta t}{\Delta x}$ changed from $0.6$ to $0.5$.
+\end{answer}
+
+\subsection{Part (2)}
+
+\begin{answer}
+    I choose to use the following scheme:
+    \begin{equation}
+        \tfrac{U_j^{n+1} - U_j^n}{\Delta t} = \tfrac{U_{j+1}^n - 2U_j^n + U_{j-1}^n}{\Delta x^2}.
+    \end{equation}
+    That means
+    \begin{equation}
+        \begin{aligned}
+            &U_j^{n+1} = U_j^n+\tfrac{\Delta t(U_{j+1}^n - 2U_j^n + U_{j-1}^n)}{\Delta x^2}\\
+            \Rightarrow &U_j^{n+1} = \tfrac{\Delta t}{\Delta x^2}U_{j+1}^n + (1-\tfrac{2\Delta t}{\Delta x^2})U_j^n + \tfrac{\Delta t}{\Delta x^2}U_{j-1}^n.
+        \end{aligned}
+    \end{equation}
+    Again, I choose to use the mesh size of $\Delta t = 0.1, \, \Delta x = \tfrac{1}{6}$. 
+    \begin{table}[H]
+\centering
+\begin{adjustbox}{width=\columnwidth,center}
+\begin{tabular}{|c|c|c|c|c|c|c|c|c|c|c|c|c|c|}
+\hline
+\textbf{} & -1/2 & -1/3           & -1/6           & 0 & 1/6            & 1/3            & 1/2 & 2/3            & 5/6            & 1 & 7/6            & 4/3            & 3/2 \\ \hline
+0.5       &      &                &                &   &                &                & 0   &                &                &   &                &                &     \\ \hline
+0.4       &      &                &                &   & 39.5752824919  & 39.5752824919  & 0   & 39.5752824919  & 39.5752824919  &   &                &                &     \\ \hline
+0.3       &      &                &                & 0 & -15.2212624969 & -15.2212624969 & 0   & 15.2212624969  & 15.2212624969  & 0 &                &                &     \\ \hline
+0.2       &      &                & -5.85433172956 & 0 & 5.85433172956  & 5.85433172956  & 0   & -5.85433172956 & -5.85433172956 & 0 & 5.85433172956  &                &     \\ \hline
+0.1       &      & 2.25166604983  & 2.25166604983  & 0 & -2.25166604983 & -2.25166604983 & 0   & 2.25166604983  & 2.25166604983  & 0 & -2.25166604983 & -2.25166604983 &     \\ \hline
+0         & 0    & -0.86602540378 & -0.86602540378 & 0 & 0.86602540378  & 0.86602540378  & 0   & -0.86602540378 & -0.86602540378 & 0 & 0.86602540378  & 0.86602540378  & 0   \\ \hline
+\end{tabular}
+\end{adjustbox}
+\caption{Numerical Solution to $u(0.5,0.5)$}
+\label{tab:tab3}
+\end{table}
+    Next, I tried the mesh size of $\Delta t = 0.1, \, \Delta x =0.2$.
+    \begin{table}[H]
+\centering
+\begin{adjustbox}{width=\columnwidth,center}
+\begin{tabular}{|c|c|c|c|c|c|c|c|c|c|c|c|}
+\hline
+\textbf{} & -0.5 & -0.3           & -0.1           & 0.1            & 0.3            & 0.5            & 0.7            & 0.9            & 1.1            & 1.3            & 1.5 \\ \hline
+0.5       &      &                &                &                &                & $1841.51145932$  &                &                &                &                &     \\ \hline
+0.4       &      &                &                &                & $415.769851672$  & $-377.797212984$ & $-283.64080872$  &                &                &                &     \\ \hline
+0.3       &      &                &                & $-11.8375415536$ & $-73.7206198039$ & $60.1924905361$  & $18.9097194682$  & $-143.393262875$ &                &                &     \\ \hline
+0.2       &      &                & $-3.54235118344$ & $5.77185139664$  & $8.04229679664$  & $-10.8487216503$ & $-1.32325522267$ & $16.2954010813$  & $-29.9614081971$ &                &     \\ \hline
+0.1       &      & $2.33476293444$  & $1.44296284916$  & $-1.44296284916$ & $-1.44296284916$ & $2.35114100916$  & $0.86529980371$  & $-1.49596341229$ & $3.25931916916$  & $-5.27368919588$ &     \\ \hline
+0         & 0    & $-0.95105651629$ & $-0.58778525229$ & $0.58778525229$  & $0.95105651629$  & $-0.58778525229$ & $-0.95105651629$ & $-0.58778525229$ & $-0.58778525229$ & $0.95105651629$  & 0   \\ \hline
+\end{tabular}
+\end{adjustbox}
+\caption{Numerical Solution to $u(0.5,0.5)$ with different mesh size}
+\label{tab:tab4}
+\end{table}
+The solution at $u(0.5,0.5)$ changed from $0$ to $1841.51145932$a as $\tfrac{\Delta t}{\Delta x}$ changed from $0.6$ to $0.5$. Thus, the scheme doesn't converge.
+\end{answer}

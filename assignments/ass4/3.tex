@@ -1,0 +1,57 @@
+\section{Question 3}
+
+\begin{question}
+    Write down the Crank-Nicolson scheme for solving $u_t+a u_x+b u_y=0 \quad(a, b$ are constants). Transform the scheme into an ADI scheme and study its accuracy and stability.
+
+\end{question}
+
+\begin{answer}
+    The $2$-D Crank-Nicolson scheme is
+    \begin{equation}
+        \begin{aligned}
+            &\tfrac{U_{jk}^{n+1} - U_{jk}^{n}}{\Delta t} + \tfrac{1}{2}\left[\left(a\cdot \tfrac{U_{j+1,k}^{n+1} - U_{j-1,k}^{n+1}}{2\Delta x} + b\cdot \tfrac{U_{j,k+1}^{n+1}-U_{j,k-1}^{n+1}}{2\Delta y}\right) + \left(a\cdot \tfrac{U_{j+1,k}^{n} - U_{j-1,k}^{n}}{2\Delta x} + b\cdot \tfrac{U_{j,k+1}^{n}-U_{j,k-1}^{n}}{2\Delta y}\right)\right] = 0\\
+            \Rightarrow &U_{jk}^{n+1} = U_{jk}^{n} - \tfrac{\Delta t}{2}\left[\left(a\cdot \tfrac{U_{j+1,k}^{n+1} - U_{j-1,k}^{n+1}}{2\Delta x} + b\cdot \tfrac{U_{j,k+1}^{n+1}-U_{j,k-1}^{n+1}}{2\Delta y}\right) + \left(a\cdot \tfrac{U_{j+1,k}^{n} - U_{j-1,k}^{n}}{2\Delta x} + b\cdot \tfrac{U_{j,k+1}^{n}-U_{j,k-1}^{n}}{2\Delta y}\right)\right]\\
+            & \text{ If we let $R_x = \tfrac{a\Delta t}{\Delta x}$ and $R_y = \tfrac{b\Delta t}{\Delta y}$, then we have:}\\
+            &U_{jk}^{n+1} = U_{jk}^{n} - \tfrac{R_x}{4}\cdot(U_{j+1,k}^{n+1} - U_{j-1,k}^{n+1} + U_{j+1,k}^{n} - U_{j-1,k}^{n}) - \tfrac{R_y}{4}\cdot(U_{j,k+1}^{n+1}-U_{j,k-1}^{n+1} + U_{j,k+1}^{n}-U_{j,k-1}^{n})\\
+            \Rightarrow &U_{jk}^{n+1} + \tfrac{R_x}{4}\cdot(U_{j+1,k}^{n+1} - U_{j-1,k}^{n+1}) + \tfrac{R_y}{4}\cdot(U_{j,k+1}^{n+1}-U_{j,k-1}^{n+1}) = U_{jk}^{n} - \tfrac{R_x}{4}\cdot(U_{j+1,k}^{n} - U_{j-1,k}^{n}) - \tfrac{R_y}{4}\cdot(U_{j,k+1}^{n}-U_{j,k-1}^{n})\\
+            & \text{ If we let $D_xU_{ij} = U_{j+1,k} - U_{j-1,k}$ and $F_yU_{ij} = U_{j,k+1}-U_{j,k-1}$, then we have:}\\
+            &U_{jk}^{n+1} + \tfrac{R_x}{4}\cdot D_xU_{jk}^{n+1} + \tfrac{R_y}{4}\cdot D_yU_{jk}^{n+1} = U_{jk}^{n} - \tfrac{R_x}{4}\cdot D_xU_{jk}^{n} - \tfrac{R_y}{4}\cdot D_yU_{jk}^{n}\\
+            \Rightarrow &(1+\tfrac{R_x}{4}D_x+\tfrac{R_y}{4}D_y)U_{jk}^{n+1} = (1-\tfrac{R_x}{4}D_x-\tfrac{R_y}{4}D_y)U_{jk}^n
+        \end{aligned}
+    \end{equation}
+    Then, to transform the scheme into an ADI scheme, we could factorize the both sides of the equation
+    \begin{equation}
+        \begin{aligned}
+            &(1+\tfrac{R_x}{4}D_x+\tfrac{R_y}{4}D_y)U_{jk}^{n+1} = (1-\tfrac{R_x}{4}D_x-\tfrac{R_y}{4}D_y)U_{jk}^n\\
+            \Rightarrow &(1+\tfrac{R_x}{4}D_x)(1+\tfrac{R_y}{4}D_y)U_{jk}^{n+1} - \tfrac{R_xR_y}{16}D_xD_yU_{jk}^{n+1} = (1-\tfrac{R_x}{4}D_x)(1-\tfrac{R_y}{4}D_y)U_{jk}^n-\tfrac{R_xR_y}{16}D_xD_yU_{jk}^{n}\\
+            \Rightarrow &(1+\tfrac{R_x}{4}D_x)(1+\tfrac{R_y}{4}D_y)U_{jk}^{n+1} = (1-\tfrac{R_x}{4}D_x)(1-\tfrac{R_y}{4}D_y)U_{jk}^n + \tfrac{R_xR_y}{16}D_xD_y(U_{jk}^{n+1}-U_{jk}^{n})
+        \end{aligned}
+    \end{equation}
+    We can truncate the term $\tfrac{\Delta t^2}{16}\tfrac{D_x}{\Delta x}\tfrac{D_y}{\Delta y}(U_{jk}^{n+1}-U_{jk}^{n})$, which has truncation error of $\Delta t^2$.
+    
+    If we split this, we have:
+    \begin{equation}
+        \begin{cases}
+            (1+\tfrac{R_x}{4}D_x)U_{jk}^{\star} = (1-\tfrac{R_x}{4}D_x)(1-\tfrac{R_y}{4}D_y)U_{jk}^n\\
+            (1+\tfrac{R_y}{4}D_y)U_{jk}^{n+1} = U_{jk}^{\star}
+        \end{cases}
+    \end{equation}
+    This is the ADI scheme based on the $2$-D Crank-Nicolson scheme. The truncation error is $\mathcal{O}(\Delta t^2 + \Delta x^2 + \Delta y^2)$.
+    
+    To analyze the stability of this ADI scheme, we could apply the Fourier Transform on it.
+    \begin{equation}
+        \begin{aligned}
+            &\left(1+i\tfrac{R_x}{2}\sin(\xi)\right)\left(1+i\tfrac{R_y}{2}\sin(\eta)\right)\widehat{U^{n+1}}(\xi,\eta) = \left(1-i\tfrac{R_x}{2}\sin(\xi)\right)\left(1-i\tfrac{R_y}{2}\sin(\eta)\right)\widehat{U^{n}}(\xi,\eta)\\
+            \Rightarrow &\widehat{U^{n+1}}(\xi,\eta) = \tfrac{\left(1-i\frac{R_x}{2}\sin(\xi)\right)\left(1-i\frac{R_y}{2}\sin(\eta)\right)}{\left(1+i\frac{R_x}{2}\sin(\xi)\right)\left(1+i\frac{R_y}{2}\sin(\eta)\right)}\widehat{{U^{n}}}(\xi,\eta)
+        \end{aligned}
+    \end{equation}
+    Hence, the Fourier symbol would be
+    \begin{equation}
+        \rho(\xi,\eta) = \tfrac{\left(1-i\frac{R_x}{2}\sin(\xi)\right)\left(1-i\frac{R_y}{2}\sin(\eta)\right)}{\left(1+i\frac{R_x}{2}\sin(\xi)\right)\left(1+i\frac{R_y}{2}\sin(\eta)\right)}
+    \end{equation}
+    Then, we have:
+    \begin{equation}
+        \lvert \rho(\xi,\eta) \rvert^2 = \tfrac{\left(1-\frac{R_xR_y}{4}\sin(\xi)\sin(\eta)\right)^2 + \left(\frac{R_x}{2}\sin(\xi)+\frac{R_y}{2}\sin(\eta)\right)^2}{\left(1-\frac{R_xR_y}{4}\sin(\xi)\sin(\eta)\right)^2 + \left(\frac{R_x}{2}\sin(\xi)+\frac{R_y}{2}\sin(\eta)\right)^2}  = 1, \text{ for $\xi, \eta \in [-\pi,\pi]$}.
+    \end{equation}
+    Thus, the scheme is unconditionally stable.
+\end{answer}

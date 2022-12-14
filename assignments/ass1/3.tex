@@ -1,0 +1,44 @@
+\section{Question 3}
+
+\begin{question}
+    For $u_t-u_{x x}=0$,
+    The implicit scheme can be written as
+    $$
+    \frac{U_i^{n+1}-U_i^n}{\Delta t}-\frac{U_{i+1}^{n+1}-2 U_i^{n+1}+U_{i-1}^{n+1}}{\Delta x^2}=0
+    $$
+    Show that $\left|U_i^n-u_i^n\right|=O\left(\Delta t+\Delta x^2\right)$ as $\Delta t, \Delta x \rightarrow 0$, $n \Delta t \leqslant T .$
+\end{question}
+
+\begin{answer}
+    \begin{proof}
+        By doing the Taylor expansion, we could see that
+        \begin{equation}\label{eqn:eqn16}
+            \dfrac{u_i^{n+1}-u_i^n}{\Delta t}-\dfrac{u_{i+1}^{n+1}-2 u_i^{n+1}+u_{i-1}^{n+1}}{\Delta x^2}=O(\Delta t + \Delta x^2),
+        \end{equation}
+        and our scheme is:
+        \begin{equation}\label{eqn:eqn17}
+            \dfrac{U_i^{n+1}-U_i^n}{\Delta t}-\dfrac{U_{i+1}^{n+1}-2 U_i^{n+1}+U_{i-1}^{n+1}}{\Delta x^2}=0
+        \end{equation}
+        Then, by subtracting equation \ref{eqn:eqn17} from equation \ref{eqn:eqn16}, and define $e_i^n = u_i^n - U_i^n$, we have:
+        \begin{equation}
+            \begin{aligned}
+                &\dfrac{e_i^{n+1}-e_i^n}{\Delta t}-\dfrac{e_{i+1}^{n+1}-2 e_i^{n+1}+e_{i-1}^{n+1}}{\Delta x^2}=O(\Delta t + \Delta x^2)\\
+                \Rightarrow &-\tfrac{\Delta t}{\Delta x^2}e_{i+1}^{n+1} + (1+2\tfrac{\Delta t}{\Delta x^2})e_{i}^{n+1} - \tfrac{\Delta t}{\Delta x^2}e_{i-1}^{n+1} = e_{i}^{n} + \Delta t \cdot O(\Delta t + \Delta x^2)\\
+                \Rightarrow &\lvert e_{i}^{n} \rvert + \Delta t \cdot O(\Delta t + \Delta x^2) \leq -\tfrac{\Delta t}{\Delta x^2}\lvert e_{i+1}^{n+1}\rvert + (1+2\tfrac{\Delta t}{\Delta x^2})\lvert e_{i}^{n+1}\rvert - \tfrac{\Delta t}{\Delta x^2} \lvert e_{i-1}^{n+1} \rvert
+            \end{aligned}
+        \end{equation}
+        Ignoring the machine error, we know that as $\Delta t,\, \Delta x \to 0$, the scheme converges if and only if: 
+        \begin{equation}
+            \sup_{i} \lvert e_j^n \rvert \leq \sup_{i}\lvert e_{j}^{0} = 0 \rvert,\; \forall n
+        \end{equation}
+        Since $\lvert e_i^N \rvert \leq \sup_{i}\lvert e_i^N \rvert$, we have
+        \begin{equation}
+            \begin{aligned}
+                \lvert e_{i}^{n} \rvert + \Delta t \cdot O(\Delta t + \Delta x^2) &\leq -\tfrac{\Delta t}{\Delta x^2}\lvert e_{i+1}^{n+1}\rvert + (1+2\tfrac{\Delta t}{\Delta x^2})\lvert e_{i}^{n+1}\rvert - \tfrac{\Delta t}{\Delta x^2} \lvert e_{i-1}^{n+1} \rvert\\
+                & \leq -\tfrac{\Delta t}{\Delta x^2}\sup_{i}\lvert e_i^{n+1} \rvert + (1+2\tfrac{\Delta t}{\Delta x^2})\sup_{i}\lvert e_i^{n+1} \rvert - \tfrac{\Delta t}{\Delta x^2} \sup_{i}\lvert e_i^{n+1} \rvert\\
+                &=\sup_{i}\lvert e_i^{n+1} \rvert \leq \sup_{i}\lvert e_{j}^{0} \rvert
+            \end{aligned}
+        \end{equation}
+        Thus, $\lvert e_i^n \rvert \leq \lvert \Delta t \cdot O(\Delta t + \Delta x^2)$, which means $\lvert U_i^n - u_i^n \rvert = O(\Delta t + \Delta x^2)$.
+    \end{proof}
+\end{answer}

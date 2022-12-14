@@ -1,0 +1,50 @@
+\section{Question 4}
+
+\begin{question}
+   Suppose a scheme can be written as
+    $$
+    \sum_{j=-m_1}^{m_1} \alpha_j U_{i+j}^{n+1}=\sum_{j=-m_2}^{m_2} \beta_j U_{i+j}^n .
+    $$
+    Find a set of conditions for $\left\{\alpha_j, \beta_j\right\}$ so that it's stable in $l^{\infty}$, and prove your claim.
+\end{question}
+
+\begin{answer}
+    The stability in $\ell^{\infty}$ requires
+    
+    (1) $\alpha_0>0$, and $\alpha_j \leqslant 0$ for $j \neq 0$;
+    
+    (2) $\beta_j \geqslant 0$;
+    
+    (3) $\sum_{j=-m_1}^{m_1} \alpha_j=\sum_{j=-m_2}^{m_2} \beta_j$.
+    
+    \begin{proof}
+        Suppose there are error $\widetilde{e_i^0}$ at the initial time. Then, we have the initial value to be $V_i^0$. Look at the scheme:
+        $$
+            \sum_{j=-m_1}^{m_1} \alpha_j U_{i+j}^{n+1}=\sum_{j=-m_2}^{m_2} \beta_j U_{i+j}^n .
+        $$
+        We have
+        $$
+            \sum_{j=-m_1}^{m_1} \alpha_j V_{i+j}^{n+1}=\sum_{j=-m_2}^{m_2} \beta_j V_{i+j}^n .
+        $$
+        Subtracting one from the other, we have:
+        $$
+            \sum_{j=-m_1}^{m_1} \alpha_j \widetilde{e_{i+j}^{n+1}}=\sum_{j=-m_2}^{m_2} \beta_j \widetilde{e_{i+j}^n} .
+        $$
+        Because $\alpha_0 > 0$, $a_j \leq 0$, and $\beta_j \geqslant 0$ for $j \neq 0$, we could have:
+        $$
+            \begin{aligned}
+                a_0 \widetilde{e_{i}^{n+1}} &= \sum_{j=-m_1}^{-1} -\alpha_j \widetilde{e_{i+j}^{n+1}} + \sum_{j=1}^{m_2} -\alpha_j \widetilde{e_{i+j}^{n+1}} + \sum_{j=-m_2}^{m_2} \beta_j \widetilde{e_{i+j}^n}\\
+                \Rightarrow \left\lvert a_0 \widetilde{e_{i}^{n+1}} \right\lvert &= \left\lvert \sum_{j=-m_1}^{-1} -\alpha_j \widetilde{e_{i+j}^{n+1}} + \sum_{j=1}^{m_2} -\alpha_j \widetilde{e_{i+j}^{n+1}} + \sum_{j=-m_2}^{m_2} \beta_j \widetilde{e_{i+j}^n}\right\rvert\\
+                \Rightarrow a_0 \left\lvert \widetilde{e_{i}^{n+1}} \right\lvert &\leq  \sum_{j=-m_1}^{-1} \left\lvert-\alpha_j \widetilde{e_{i+j}^{n+1}}\right\rvert + \sum_{j=1}^{m_2} \left\lvert-\alpha_j \widetilde{e_{i+j}^{n+1}}\right\rvert + \sum_{j=-m_2}^{m_2} \left\lvert\beta_j \widetilde{e_{i+j}^n}\right\rvert\\
+                \Rightarrow a_0 \left\lvert \widetilde{e_{i}^{n+1}} \right\lvert &\leq  \sum_{j=-m_1}^{-1} -\alpha_j\left\lvert \widetilde{e_{i+j}^{n+1}}\right\rvert + \sum_{j=1}^{m_2} -\alpha_j \left\lvert\widetilde{e_{i+j}^{n+1}}\right\rvert + \sum_{j=-m_2}^{m_2} \beta_j\left\lvert \widetilde{e_{i+j}^n}\right\rvert\\
+                \Rightarrow a_0 \left\lvert \widetilde{e_{i}^{n+1}} \right\lvert &\leq  \sum_{j=-m_1}^{-1} -\alpha_j\sup_{i}\left\lvert \widetilde{e_{i}^{n+1}}\right\rvert + \sum_{j=1}^{m_2} -\alpha_j \sup_{i}\left\lvert\widetilde{e_{i}^{n+1}}\right\rvert + \sum_{j=-m_2}^{m_2} \beta_j\sup_{i}\left\lvert \widetilde{e_{i}^n}\right\rvert\\
+                \Rightarrow a_0 \left\lvert \widetilde{e_{i}^{n+1}} \right\lvert &\leq  (-\sum_{j=-m_2}^{m_2} \beta_j+a_0)\sup_{i}\left\lvert \widetilde{e_{i}^{n+1}}\right\rvert + \sum_{j=-m_2}^{m_2} \beta_j\sup_{i}\left\lvert \widetilde{e_{i}^n}\right\rvert \text{ (By condition (3))}\\
+                \Rightarrow a_0 \sup_{i}\left\lvert \widetilde{e_{i}^{n+1}} \right\lvert &\leq  (-\sum_{j=-m_2}^{m_2} \beta_j+a_0)\sup_{i}\left\lvert \widetilde{e_{i}^{n+1}}\right\rvert + \sum_{j=-m_2}^{m_2} \beta_j\sup_{i}\left\lvert \widetilde{e_{i}^n}\right\rvert\\
+                \Rightarrow a_0 \sup_{i}\left\lvert \widetilde{e_{i}^{n+1}} \right\lvert &+ (\sum_{j=-m_2}^{m_2} \beta_j-a_0)\sup_{i}\left\lvert \widetilde{e_{i}^{n+1}}\right\rvert \leq \sum_{j=-m_2}^{m_2} \beta_j\sup_{i}\left\lvert \widetilde{e_{i}^n}\right\rvert\\
+                \Rightarrow \sum_{j=-m_2}^{m_2} \beta_j\sup_{i}\left\lvert \widetilde{e_{i}^{n+1}}\right\rvert &\leq \sum_{j=-m_2}^{m_2} \beta_j\sup_{i}\left\lvert \widetilde{e_{i}^n}\right\rvert\\
+                \Rightarrow \sup_{i}\left\lvert \widetilde{e_{i}^{n+1}}\right\rvert &\leq \sup_{i}\left\lvert \widetilde{e_{i}^n}\right\rvert
+            \end{aligned}
+        $$
+        Thus, we have $\sup_{i}\left\lvert \widetilde{e_{i}^{n+1}}\right\rvert \leq \sup_{i}\left\lvert \widetilde{e_{i}^n}\right\rvert \leq  \sup_{i}\left\lvert \widetilde{e_{i-1}^n}\right\rvert \leq \cdots \leq \sup_{i}\left\lvert \widetilde{e_{0}^n}\right\rvert$, which implies the stability in $\ell^{\infty}$.
+    \end{proof}
+\end{answer}

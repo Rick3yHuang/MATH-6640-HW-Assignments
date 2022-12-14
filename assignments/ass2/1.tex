@@ -1,0 +1,53 @@
+\section{Question 1}
+
+\begin{question}
+    For $u_t+a u_x=0$ (``$a$"is a constant),
+    derive an implicit Lax-Wendroff scheme and study its stability.
+\end{question}
+
+\begin{answer}
+    For $u_x$, we could use $\tfrac{U_{j+1}^{n+1} - U_{j-1}^{n+1}}{2\Delta x} + O(\Delta x^2)$ to approximate. For the other term, we have
+    \begin{equation}\label{eqn:eqn1}
+        \begin{aligned}
+            &U_j^{n+1} = U_j^n + \partial_tU_j^n\Delta t + \tfrac{1}{2}\partial_{tt}U_j^n\Delta t + O(\Delta t^3)\\
+            \Rightarrow &\partial_t U_j^n = \tfrac{U_j^{n+1} - U_j^n}{\Delta t} - \tfrac{1}{2}\partial_{tt}U_j^n \Delta t + O(\Delta t^2)
+        \end{aligned}
+    \end{equation}
+    From the equation, we have $u_t = -au_x \Rightarrow u_{tt} = -a(u_t)_x = -a(-au_x)_x = a^u_{xx}$. Plugging this back in to the equation \ref{eqn:eqn1}, we have $\partial_{tt}U_j^n = a^2 \partial_{xx}U_j^n$. Using the terms $U_{j-1}^{n+1}, U_{j}^{n+1}$, and $U_{j+1}^{n+1}$ to approximate, we have:
+    \begin{equation}
+        \partial_{tt}U_j^n = a^2 \tfrac{U_{j-1}^{n+1} - 2U_j^{n+1} + U_{j+1}^{n+1}}{\Delta x^2} + O(\Delta x^2).
+    \end{equation}
+    Plugging both approximation into the equation and truncate the error terms, we obtain an implicit Lax-Wendroff scheme:
+    \begin{equation}\label{eqn:eqn2}
+        \tfrac{U_j^{n+1} - U_j^n}{\Delta t} + a \tfrac{U_{j+1}^{n+1}-U_{j-1}^{n+1}}{2\Delta x} - \tfrac{a^2}{2} \tfrac{\Delta t}{\Delta x^2} (U_{j-1}^{n+1} - 2U_{j}^{n+1} + U_{j+1}^{n+1}) = 0
+    \end{equation}
+    and the truncation error is $O(\Delta t^2 + \Delta x^2)$. We could also rewrite this scheme as:
+    \begin{equation}
+        (-\tfrac{R^2}{2} - \tfrac{R}{2})U_{j-1}^{n+1} + (1 + R^2)U_j^{n+1} + (-\tfrac{R^2}{2} + \tfrac{R}{2})U_{j+1}^{n+1} = U_j^n
+    \end{equation}
+    where $R = \tfrac{a\Delta t}{\Delta x}$
+    
+    In order to show the $l^{2}$-stability, we could apply the discrete Fourier Transform to the scheme in the equation \ref{eqn:eqn2}, then we have:
+    \begin{equation}
+        \begin{aligned}
+            &\widehat{U^{n+1}}+\tfrac{R}{2}(e^{i\xi} - e^{-i\xi})\widehat{U^{n+1}} - \tfrac{R^2}{2}(e^{i\xi} - 2 + e^{-i\xi})\widehat{U^{n+1}} = \widehat{U^{n}}\\
+            \Rightarrow &(1 + Ri\sin(\xi) - R^2(\cos(\xi) - 1))\widehat{U^{n+1}} = \widehat{U^{n}}\\
+            \Rightarrow &\left(1 + 2R^2\sin^2\left(\tfrac{\xi}{2}\right) + R\sin(\xi)i\right) \widehat{U^{n+1}} = \widehat{U^n}\\
+            \Rightarrow &\left(1 + 2R^2\sin^{2}\left(\tfrac{\xi}{2}\right) + 2R\sin(\tfrac{\xi}{2})\cos\left(\tfrac{\xi}{2}\right)i\right)\widehat{U^{n+1}} = \widehat{U^n}\\
+            \Rightarrow &\widehat{U^{n+1}} = \tfrac{1}{1 + 2R^2\sin^{2}\left(\tfrac{\xi}{2}\right) + 2R\sin\left(\tfrac{\xi}{2}\right)\cos\left(\tfrac{\xi}{2}\right)i}\widehat{U^n}\\
+            \xRightarrow{def} &\widehat{U^{n+1}} = \rho(\xi)\widehat{U^n}
+        \end{aligned}
+    \end{equation}
+    To have a stable scheme, we need to make sure the square of the Fourier symbol we defined above to be bounded by $1$, i.e. $\lvert \rho(\xi) \rvert^2 \leq 1$. Then,
+    \begin{equation}
+        \begin{aligned}
+            \lvert \rho(\xi) \rvert^2 &= \tfrac{1}{\left(1+2R^2\sin^2\left(\tfrac{\xi}{2}\right)\right)^2 + 4R^2\sin^2\left(\tfrac{\xi}{2}\right)\cos^2\left(\tfrac{\xi}{2}\right)}\\
+            &= \tfrac{1}{1+4R^2\sin^2\left(\tfrac{\xi}{2}\right) + 4R^4\sin^4(\tfrac{\xi}{2}) + 4R^2\sin^2\left(\tfrac{\xi}{2}\right)\cos^2\left(\tfrac{\xi}{2}\right)}\\
+            &= \tfrac{1}{1 + 4R^4\sin^4(\tfrac{\xi}{2}) + 4R^2\sin^2\left(\tfrac{\xi}{2}\right) \left(1 - \cos^2\left(\tfrac{\xi}{2}\right) \right)}\\
+            &= \tfrac{1}{1 + 4R^4\sin^4(\tfrac{\xi}{2}) + 4R^2\sin^4\left(\tfrac{\xi}{2}\right)} \leq 1\\
+            \Rightarrow &1 + 4(R^4+R^2)\sin^4(\tfrac{\xi}{2}) \geq 1\\
+            \Rightarrow &4(R^4+R^2)\sin^4(\tfrac{\xi}{2}) \geq 0
+        \end{aligned}
+    \end{equation}
+    This equality always holds, so that this implicit Lax-Wendroff scheme is unconditionally stable.
+\end{answer}

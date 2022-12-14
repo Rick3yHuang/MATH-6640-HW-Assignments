@@ -1,0 +1,129 @@
+% ------------------------ COLORS
+
+\definecolor{ass-color}{HTML}{FCEA88}
+
+\DeclareRobustCommand{\asshl}[1]{{\sethlcolor{ass-color}\hl{#1}}}
+
+% ------------------------ FONTS
+
+\setmainfont{AvenirNextCyr}[
+    Path=fonts/avenir/,
+    Extension = .ttf,
+    UprightFont=*-Regular,
+    BoldFont=*-Demi,
+    ItalicFont=*-Italic,
+    BoldItalicFont=*-DemiItalic
+]
+
+\urlstyle{same}
+
+\newfontfamily{\emphfont}{Canela}[
+    Path=fonts/canela/,
+    Extension = .ttf,
+    UprightFont=*-Regular,
+    BoldFont=*-Bold,
+    ItalicFont=*-RegularItalic,
+    BoldItalicFont=*-BoldItalic
+]
+
+\setmathfont{Libertinus Math}
+
+% ------------------------ TITLE STYLE
+
+\setcounter{secnumdepth}{0}
+
+\titleformat{\section}
+  {\emphfont\LARGE\bfseries}{\thesection.}{1em}{}
+\titleformat{\subsection}
+  {\emphfont\Large\bfseries}{\thesubsection.}{1em}{}
+\titleformat{\subsubsection}
+  {\emphfont\large\bfseries}{\thesubsubsection.}{1em}{}
+  
+\titlespacing*{\section}{0pt}{\baselineskip}{0.3em}
+\titlespacing*{\subsection}{0pt}{0.5em}{0.3em}
+\titlespacing*{\subsubsection}{0pt}{0.3em}{0em}
+
+%\renewcommand{\cfttoctitlefont}{\LARGE\bfseries\emphfont}
+\renewcommand{\cftsecleader}{\cftdotfill{\cftdotsep}}
+\newcommand\mydot[1]{\scalebox{#1}{.}}
+\renewcommand\cftdot{{\color{ass-color}\mydot{2.5}}}
+
+\newcommand{\MATLAB}{\textsc{Matlab}\xspace}
+
+\renewcommand{\cftsecindent}{7.5em}
+\renewcommand{\cftsubsecindent}{7.5em}
+\renewcommand{\cftsubsubsecindent}{7.5em}
+\renewcommand{\cftsecafterpnum}{\hspace*{7.5em}}
+\renewcommand{\cftsubsecafterpnum}{\hspace*{7.5em}}
+\renewcommand{\cftsubsubsecafterpnum}{\hspace*{7.5em}}
+\addto\captionsenglish{\renewcommand{\contentsname}{}}
+\newcommand{\toc}{\vskip -3em \tableofcontents}
+\newcommand{\bmat}[1]{\begin{bmatrix} #1 \end{bmatrix}}
+\newcommand{\mat}[1]{\mathbf{#1}}
+ 
+ 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%% New Commands
+%%% Maketitle metadata
+\newcommand{\horrule}[1]{\rule{\linewidth}{#1}} 	% Horizontal rule
+\newcommand{\im}{\ensuremath{\operatorname{im}}}
+\newcommand{\lm}{\ensuremath{\operatorname{LM}}}
+\newcommand{\lt}{\ensuremath{\operatorname{LT}}}
+\newcommand{\lc}{\ensuremath{\operatorname{LC}}}
+\newcommand{\lev}{\ensuremath{\operatorname{lev}}}
+\newcommand{\coker}{\ensuremath{\operatorname{coker}}}
+\newcommand{\initTerm}{\ensuremath{\operatorname{in}}}
+\newcommand{\mingens}{\ensuremath{\operatorname{mingens}}}
+\newcommand{\lex}{\ensuremath{\operatorname{lex}}}
+\newcommand{\lcm}{\ensuremath{\operatorname{lcm}}}
+\newcommand{\grlex}{\ensuremath{\operatorname{grlex}}}
+\newcommand{\grevlex}{\ensuremath{\operatorname{grevlex}}}
+\newcommand{\id}{\ensuremath{\operatorname{id}}}
+\newcommand{\multideg}{\ensuremath{\operatorname{multideg}}}
+\newcommand{\Division}{\ensuremath{\operatorname{Division}}}
+\newcommand{\Euclidean}{\ensuremath{\operatorname{Euclidean}}}
+\newcommand{\GL}{\ensuremath{\operatorname{GL}}}
+\newcommand{\onto}{\ensuremath{\twoheadrightarrow}}
+\newcommand{\into}{\ensuremath{\hookrightarrow}}
+\newcommand{\itab}[1]{\hspace{0em}\rlap{#1}}
+\newcommand{\RNum}[1]{\uppercase\expandafter{\romannumeral #1\relax}}
+\newcommand{\defeq}{\overset{def}{=\joinrel=}}
+
+%%% Renew Commands
+\renewcommand{\deg}{\ensuremath{\operatorname{deg}}}
+\renewcommand{\max}{\ensuremath{\operatorname{max}}}
+\renewcommand{\to}{\ensuremath{\rightarrow}}
+\renewcommand{\th}{\ensuremath{\operatorname{th}}}
+\renewcommand{\det}{\ensuremath{\operatorname{det}}}
+
+
+% ------------------------ TABLES
+
+\setlength\arrayrulewidth{1pt}
+%\arrayrulecolor{ass-color}
+
+% ------------------------ ASSIGNMENTS
+
+\newenvironment{question}{}{}
+\surroundwithmdframed[
+        hidealllines=true,
+        %backgroundcolor=ass-color,
+        innerleftmargin=2pt,
+        innerrightmargin=2pt,
+        innertopmargin=5pt,
+        innerbottommargin=5pt,
+        skipabove=1em,
+        skipbelow=0em
+    ]{question}
+
+\newenvironment{answer}{
+	{\bf{Answer:}}
+    }{}
+
+% ------------------------ OTHER
+
+\setlength\parskip{.5em}
+\setlength{\parindent}{0pt}
+
+\makeatother
+

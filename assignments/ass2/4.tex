@@ -1,0 +1,44 @@
+\section{Question 4}
+
+\begin{question}
+    Derive a Peaceman-Rachford scheme for the non-homogeneous equation $u_t=\Delta u+f(x, y, t)$, where $f$ is a smooth function. Study its truncation error and stability.
+\end{question}
+
+\begin{answer}
+    Let $D_x^2U_{ij} = D_x^{+}D_x^{-}U_{ij} = U_{i+1,j} - 2U_{ij} + U_{i-1,j}$ and $D_y^2U_{ij} = D_y^{+}D_y^{-}U_{ij} = U_{i,j+1} - 2U_{ij} + U_{i,j-1}$, then we have
+    \begin{equation}
+        \tfrac{U_{jk}^{n+\frac{1}{2}} - U_{jk}^n}{\frac{1}{2}\Delta t} = \tfrac{1}{\Delta x^2}D_x^2 U_{jk}^{n + \frac{1}{2}} + \tfrac{1}{\Delta y^2}D_y^2U_{jk}^n + F_{jk}^{n+\frac{1}{2}}
+    \end{equation}
+    Writing the equation using $r_1 = \tfrac{\Delta t}{\Delta x^2}$, we have:
+    \begin{equation}\label{eqn:eqn3}
+        (1-\tfrac{r_1}{2}D_x^2)U_{jk}^{n+\frac{1}{2}} = (1 + \tfrac{r_2}{2}D_y^2)U_{jk}^{n} + \tfrac{\Delta t}{2} F_{jk}^{n + \frac{1}{2}}
+    \end{equation}
+    Similarly, we could have
+    \begin{equation}
+        \tfrac{U_{jk}^{n+1} - U_{jk}^{n+\frac{1}{2}}}{\frac{1}{2}\Delta t} = \tfrac{1}{\Delta x^2}D_x^2 U_{jk}^{n + \frac{1}{2}} + \tfrac{1}{\Delta y^2}D_y^2U_{jk}^{n+1} + F_{jk}^{n+\frac{1}{2}}
+    \end{equation}
+    Writing the equation using $r_2 = \tfrac{\delta t}{\Delta y^2}$, we have:
+    \begin{equation}\label{eqn:eqn4}
+        (1-\tfrac{r_1}{2}D_x^2)U_{jk}^{n+1} = (1 + \tfrac{r_2}{2}D_y^2)U_{jk}^{n+\frac{1}{2}} + \tfrac{\Delta t}{2} F_{jk}^{n + \frac{1}{2}}
+    \end{equation}
+    Calculate $(1+\tfrac{r_1}{2}D_x^2)\cdot(20)+(1-\tfrac{r_1}{2}D_x^2)\cdot(22)$ using the fact that $1-\tfrac{r_1}{2}D_x^2$ and $1+\tfrac{r_1}{2}D_x^2$ commute, we have
+    \begin{equation}
+        (1-\tfrac{r_1}{2}D_x^2)(1-\tfrac{r_2}{2}D_y^2)U_{jk}^{n+1} = (1+\tfrac{r_1}{2}D_x^2)(1+\tfrac{r_2}{2}D_y^2)U_{jk}^n + \Delta t F_{jk}^{n+\frac{1}{2}}
+    \end{equation}
+    Multiplying this out, we have
+    \begin{equation}
+        U_{jk}^{n+1} = U_{jk}^n + \tfrac{1}{2}\left(r_1D_x^2(U_{jk}^{n+1} + U_{jk}^n) + r_2D_y^2(U_{jk}^{n+1}+U_{jk}^n)\right) - \tfrac{r_1r_2}{4}D_x^2D_y^2(U_{jk}^{n+1}-U_{jk}^{n})+ \Delta t F_{jk}^{n + \frac{1}{2}}
+    \end{equation}
+    Because the first part of the right hand side is exactly the same as the Crank-Nicolson Scheme, we know that it will have the truncation error of $O(\Delta t^2 + \Delta x^2 + \Delta y ^2)$, for the term $- \tfrac{r_1r_2}{4}D_x^2D_y^2(U_{jk}^{n+1}-U_{jk}^{n})$, it is $-\tfrac{\Delta t^2}{4}(\tfrac{D_x^2}{\Delta x^2})(\tfrac{D_y^2}{\Delta y^2})(U_{jk}^{n+1}-U_{jk}^n)$, and  $\tfrac{\Delta t^2}{4}$ is $O(\Delta t^2)$, each of $\tfrac{D_x^2}{\Delta x^2}$ and $\tfrac{D_y^2}{\Delta y^2}$ is $O(1)$ since $D_x^2$ and $D_y^2$ are $\Delta x^2$ and $\Delta y^2$ separately. Also, $U_{jk}^{n+1}-U_{jk}^n$ is $O(\Delta t)$. Because we multiplied both sides of the equation by $\Delta t$ at equation \ref{eqn:eqn3} and equation \ref{eqn:eqn4}, we would divide the truncation error of $- \tfrac{r_1r_2}{4}D_x^2D_y^2(U_{jk}^{n+1}-U_{jk}^{n})$ by $\Delta t$, so that we have $O(\Delta t^2)$. Therefore, this Peaceman-Rachford scheme has truncation error of $O(\Delta t^2 + \Delta x^2 + \Delta y^2)$.
+    
+    The error equation due to the initial perturbation is without the source term, then apply the discrete F.T. to equation \ref{eqn:eqn3} and equation \ref{eqn:eqn4}, we have:
+    \begin{align}
+        \left(1+2r_1\sin^2\left(\tfrac{\xi}{2}\right)\right)\widehat{U^{n+\frac{1}{2}}} &= \left(1 - 2r_2\sin^2\left(\tfrac{\eta}{2}\right)\right)\widehat{U^n}\\
+        \left(1+2r_1\sin^2\left(\tfrac{\eta}{2}\right)\right)\widehat{U^{n+1}} &= \left(1 - 2r_2\sin^2\left(\tfrac{\xi}{2}\right)\right)\widehat{U^{n+\tfrac{1}{2}}}
+    \end{align}
+    If we calculate $\left(1-2r_1\sin^2\left(\tfrac{\xi}{2}\right)\right)\cdot(25)+\left(1+2r_1\sin^2\left(\tfrac{\xi}{2}\right)\right)\cdot(26)$, we will have:
+    \begin{equation}
+        \widehat{U^{n+1}} = \tfrac{\left(1-2r_1\sin^2\left(\tfrac{\xi}{2}\right)\right)\left(1 - 2r_2\sin^2\left(\tfrac{\eta}{2}\right)\right)}{\left(1+2r_1\sin^2\left(\tfrac{\xi}{2}\right)\right)\left(1+2r_1\sin^2\left(\tfrac{\eta}{2}\right)\right)}\widehat{U^n} \defeq \rho(\xi,\eta)\widehat{U^n}
+    \end{equation}
+    Notice that $\left(1-2r_1\sin^2\left(\tfrac{\xi}{2}\right)\right)\left(1 - 2r_2\sin^2\left(\tfrac{\eta}{2}\right)\right)$ is always smaller than $\left(1+2r_1\sin^2\left(\tfrac{\xi}{2}\right)\right)\left(1+2r_1\sin^2\left(\tfrac{\eta}{2}\right)\right)$, then $\lvert \rho(\xi,\eta) \rvert \leq 1$ unconditionally. Hence, this Peaceman-Rachford is unconditionally $l^2$-stable.
+\end{answer}

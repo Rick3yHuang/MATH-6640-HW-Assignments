@@ -1,0 +1,148 @@
+\section{Question 1}
+
+\begin{question}
+    Study the truncation error and the stability for the following schemes:
+    
+    Equation $u_t+a u_x= \nu u_{x x}$ where $a, \nu > 0$ are constants.
+\end{question}
+
+\subsubsection{Part i}
+
+\begin{question}
+    Scheme: 
+    $$\frac{U_j^{n+1}-U_j^n}{\Delta t}+a \frac{U_{j+1}^{n+1}-U_{j-1}^{n+1}}{2 \Delta x}=\nu \frac{U_{j+1}^{n+1}-2 U_j^{n+1}+U_{j-1}^{n+1}}{\Delta x^2}.$$
+\end{question}
+
+\begin{answer}
+    Since we are using the forward difference for the time dependence, and the center difference for the location dependence, we have the truncation error to be $O(\Delta t + \Delta x^2)$.
+    
+    Let $R = \tfrac{a \Delta t}{\Delta x}$ and $r = \tfrac{\nu \Delta t}{\Delta x^2}$, then we have the scheme to be
+    \begin{equation}
+        \tfrac{R}{2}(U_{j+1}^{n+1} - U_{j-1}^{n+1}) + r(U_{j+1}+2U_j^{n+1}+U_{j-1}^{n+1}) + U_{j}^{n+1} = U_{j}^n
+    \end{equation}
+    Now apply the Fourier Transform, we have
+    \begin{equation}
+        \begin{aligned}
+            &iR\sin(\xi)\widehat{U^{n+1}} + 2r(1+\cos(\xi))\widehat{U^{n+1}}+ \widehat{U^{n+1}} = \widehat{U^{n}}\\
+            \Rightarrow &((1+2r) + 2r\cos(\xi) + iR\sin(\xi))\widehat{U^{n+1}} = \widehat{U^{n}}\\
+            \Rightarrow & \widehat{U^{n+1}} = \tfrac{1}{(1+2r) + 2r\cos(\xi) + iR\sin(\xi)}\widehat{U^{n}}
+        \end{aligned}
+    \end{equation}
+    Define the Fourier symbol to be $\rho(\xi) := \tfrac{1}{(1+2r) + 2r\cos(\xi) + iR\sin(\xi)}$. Then if we want $\lvert \rho(\xi) \rvert \leq 1$, we want $\lvert (1+2r) + 2r\cos(\xi) + iR\sin(\xi)\rvert \geq 1$. Next, we have 
+    \begin{equation}\label{eqn:eqn3}
+        \lvert (1+2r) + 2r\cos(\xi) + iR\sin(\xi) \rvert^2 = (1+2r)^2 + R^2 + 4r(1+2r)\cos(\xi) + (4r^2-R^2)\cos^2(\xi),
+    \end{equation}
+    so we want equation \ref{eqn:eqn3} to be greater than or equal to $1$. To do that, we want to find the critical points of equation \ref{eqn:eqn3}.
+    \begin{equation}
+        \tfrac{d}{d\xi}(\lvert (1+2r) + 2r\cos(\xi) + iR\sin(\xi) \rvert^2) = -4r(1+2r)\sin(\xi)-2(4r^2-R^2)\cos(\xi)\sin(\xi) = 0
+    \end{equation}
+    The critical points are $\xi = 0,\pm \pi, \xi_0$ such that $\xi_0$ satisfies $\cos(\xi_0) = -\tfrac{2r(1+2r)}{4r^2-R^2}$.
+    
+    Thus, when $\xi = 0$, we have $\lvert (1+2r) + 2r\cos(\xi) + iR\sin(\xi)\rvert^2 = \lvert 1 + 4r \rvert^2 \geq 1,\, \forall r$.
+    
+    When $\xi = \pm \pi$, we have $\lvert (1+2r) + 2r\cos(\xi) + iR\sin(\xi)\rvert^2 = 8r^2-8r+1 \geq 1 \Leftrightarrow r \geq 1$.
+    
+    When $\xi = \xi_0$, we have $\lvert (1+2r) + 2r\cos(\xi) + iR\sin(\xi)\rvert^2 = -\tfrac{R^2(4r+R^2+1)}{4r^2-R^2}$
+    
+    \quad Case 1: $4r^2 - R^2 > 0$, $\lvert (1+2r) + 2r\cos(\xi) + iR\sin(\xi)\rvert^2 \geq 1 \Leftrightarrow (R^2 + 2r)^2 \leq 0$. This is not true unless $R^2 + 2r = 0 \Leftrightarrow \cos(\xi_0) = 1 \Leftrightarrow \xi_0 = 0$ (which case we have already analyzed). Thus, we want to eliminate this case later.
+    
+    \quad Case 2: $4r^2 - R^2 < 0$, $\lvert (1+2r) + 2r\cos(\xi) + iR\sin(\xi)\rvert^2 \geq 1 \Leftrightarrow (R^2 + 2r)^2 \geq 0$.
+    
+    \quad Case 3: $4r^2 - R^2 = 0$, $\tfrac{d}{d\xi}(\lvert (1+2r) + 2r\cos(\xi) + iR\sin(\xi) \rvert^2) = 0 \Leftrightarrow \cos(\xi) = 0 \Leftrightarrow \xi = 0, \pm \pi$, which are the cases we have already analyzed.
+    
+    The only way to eliminate case 1 is that we want to make sure $\cos (\xi_0) \geqslant 1$ (so that $\xi_0$ doesn't exist except a trivial case), i.e. $-\tfrac{2 r(1+2 r)}{4r^2-R^2} \geqslant 1$. (Note that $\left.4 r^2-R^2>0\right)$
+    
+    i.e. $r \leq \frac{R^2}{2}$. The only trivial case is $-\frac{2 r(1+2r)}{4r^2-R^2}=1$, so $\cos \left(\xi_0\right)=1 \Leftrightarrow \xi_0=0.$ which has been covered before.
+    
+    In conclusion, we must have $r \geq 1$ and if $4r^2-R^2>0$, then $r \leq \frac{R^2}{2}$ such that the scheme is stable.
+\end{answer}
+
+\subsubsection{Part ii}
+
+\begin{question}
+    Scheme:
+        $$
+        \begin{aligned}
+            &\frac{U_j^{n+1}-U_j^n}{\Delta t}+a \cdot \frac{1}{2}\left[\frac{U_{j+1}^{n+1}-U_{j-1}^{n+1}}{2 \Delta x}+\frac{U_{j+1}^n-U_{j-1}^n}{2 \Delta x}\right]\\
+        =&\nu \cdot \frac{1}{2}\left[\frac{U_{j+1}^{n+1}-2 U_j^{n+1}+U_{j-1}^{n+1}}{\Delta x^2}+\frac{U_{j+1}^n-2 U_j^n+U_{j-1}^n}{\Delta x^2}\right] .
+        \end{aligned}
+        $$
+\end{question}
+
+\begin{answer}
+    Since we could convert our scheme to 
+    $$
+        \begin{aligned}
+            &\frac{U_j^{n+1}-U_j^n}{\Delta t}\\
+            &= \frac{1}{2}\left[-a \left[\frac{U_{j+1}^{n+1}-U_{j-1}^{n+1}}{2 \Delta x}+\frac{U_{j+1}^n-U_{j-1}^n}{2 \Delta x}\right] +\nu \left[\frac{U_{j+1}^{n+1}-2 U_j^{n+1}+U_{j-1}^{n+1}}{\Delta x^2}+\frac{U_{j+1}^n-2 U_j^n+U_{j-1}^n}{\Delta x^2}\right]\right] .
+        \end{aligned}
+    $$
+    We are actually doing a center difference for the time variable and still a center difference for the location variable, so that the truncation error is $O(\Delta t^2 + \Delta x^2)$.
+    
+    Let $R = \tfrac{a \Delta t}{\Delta x}$ and $r = \tfrac{\nu \Delta t}{\Delta x^2}$, then we have the scheme to be
+    \begin{equation}
+        2 U_j^{n+1}+r\left(-U_{j+1}^{n+1}+2 U_j^{n+1}-U_{j-1}^{n+1}\right)+\frac{R}{2}\left(U_{j+1}^{n+1}-U_{j-1}^{n+1}\right)=2 U_j^n+r\left(U_{j+1}^n-2 U_j^n+U_{j-1}^{n}\right)+\frac{R}{2}\left(-U_{j+1}^n+U_{j-1}^n\right).
+    \end{equation}
+    Now apply the Fourier Transform, we have
+    \begin{equation}
+        \begin{aligned}
+            &(2+2 r-2 r i \sin (\xi)+R \cos (\xi)) \widehat{U^{n+1}}=(2-2 r+2 ri \sin (\xi)-R \cos (\xi)) \widehat{U^n}\\
+            \Rightarrow & \widehat{U^{n+1}} = \tfrac{2-2 r-R \cos (\xi) +2 r \sin (\xi)i}{2+2 r+R \cos (\xi)-2 r  \sin (\xi)i}\cdot\widehat{U^{n}}
+        \end{aligned}
+    \end{equation}
+    Define the Fourier symbol to be $\rho(\xi) := \tfrac{2-2 r-R \cos (\xi) +2 r \sin (\xi)i}{2+2 r+R \cos (\xi)-2 r  \sin (\xi)i}$. Then we want $\lvert \rho(\xi) \rvert \leq 1 \Leftrightarrow \lvert \rho (\xi) \rvert^2 \leq 1$.
+    
+    \begin{equation}
+        \begin{aligned}
+            \lvert \rho(\xi) \rvert^2 &= \tfrac{4(1-r)^2+R^2\cos^2(\xi)-4R(1-r)\cos(\xi)+4r^2\sin^2(\xi)}{4(1-r)^2+R^2\cos^2(\xi)+4R(1-r)\cos(\xi)+4r^2\sin^2(\xi)}\\
+            &=\tfrac{4(r^2+(1-r^2))-4R(1-r)\cos(\xi)+(R^2-4r^2)\cos^2(\xi)}{4(r^2+(1-r^2))+4R(1-r)\cos(\xi)+(R^2-4r^2)\cos^2(\xi)}\\
+            &= 1 - \tfrac{8R(1-r)\cos(\xi)}{4(r^2+(1-r^2))+4R(1-r)\cos(\xi)+(R^2-4r^2)\cos^2(\xi)} \leq 1\\
+            &\Leftrightarrow \tfrac{8R(1-r)\cos(\xi)}{4(r^2+(1-r^2))+4R(1-r)\cos(\xi)+(R^2-4r^2)\cos^2(\xi)} \geq 0
+        \end{aligned}
+    \end{equation}
+    
+    Then, if $R(1-r)\cos(\xi) \geq 0$, we are done. That is when $\xi \in [-\tfrac{\pi}{2},\tfrac{\pi}{2}]$, $r \leq 1$, and when $\xi \in [-\pi,-\tfrac{\pi}{2})\cup (\tfrac{\pi}{2},\pi]$, $r \geq 1$.
+    
+    If $R(1-r)\cos(\xi) <0$, then we need $-4R(1-r)\cos(\xi) > 4(r^2+(1-r^2)) + (R^2-4r^2)\cos^2(\xi)$.
+    
+    If the above conditions hold, then the scheme is stable.
+\end{answer}
+
+\subsubsection{Part iii}
+
+\begin{question}
+    Scheme: $$
+    \frac{U_j^{n+1}-U_j^n}{\Delta t}+a \frac{U_j^n-U_{j-1}^n}{\Delta x}=\nu \frac{U_{j+1}^n-2 U_j^n+U_{j-1}^n}{\Delta x^2},
+    $$
+    here $a>0$.
+\end{question}
+
+\begin{answer}
+    Because we are using the forward difference for the time variable and the center difference for the location variable, we would have the truncation error for this scheme to $O(\Delta t, \Delta x^2)$.
+    
+    Let $R = \tfrac{a \Delta t}{\Delta x}$ and $r = \tfrac{\nu \Delta t}{\Delta x^2}$, then we have the scheme to be
+    \begin{equation}
+        U_j^{n+1} = U_{j}^n + r(U_{j+1}^n - 2U_j^{n} + U_{j-1}^n) - R(U_j^n - U_{j-1}^n)
+    \end{equation}
+    Now apply the Fourier Transform, we have
+    \begin{equation}
+        \widehat{U^{n+1}}=((1-2r-R)-R\cos(\xi)+(R+r)\sin(\xi)i) \widehat{U^n}
+    \end{equation}
+    Define the Fourier symbol to be $\rho(\xi) := (1-2r-R)-R\cos(\xi)+(R+r)\sin(\xi)i$. Then we want $\lvert \rho(\xi) \rvert \leq 1$. That is $\lvert \rho \rvert^2 \leq 1$.
+    \begin{equation}
+        \lvert \rho \rvert^2 = (1-2r-R)^2 + (R+2r)^2 - 2R(1-2r-R)\cos(\xi)-4r(R+r)\cos^{2}(\xi)
+    \end{equation}
+    Now, in order to find the critical points, we want to find the derivative of $\lvert \rho \rvert^2$.
+    \begin{equation}
+        \tfrac{d\lvert \rho \rvert^2}{d\xi} = 2R(1-2r-R)\sin(\xi)+8r(R+r)\cos(\xi)\sin(\xi)= 0
+    \end{equation}
+    The critical points are $\xi = 0,\pm \pi, \xi_0$ such that $\xi_0$ satisfies $\cos(\xi_0) = -\tfrac{R(1-2r-R)}{4r(R+r)}$.
+    
+    Thus, when $\xi = 0$, we have $\lvert \rho(\xi) \rvert^2 = \lvert 1 - 2r -2R \rvert^2 \leq 1 \Leftrightarrow r \leq 1-R$.
+    
+    When $\xi = \pm \pi$, we have $\lvert \rho(\xi) \rvert^2 =  \lvert 1-2r\rvert^2 \leq 1 \; \forall r$.
+    
+    When $\xi = \xi_0$, we have $\lvert \rho(\xi) \rvert^2 = \tfrac{(1-2r-R)^2(4r^2+4Rr-R^2)+4r(R+2r)^2(R+r)}{4r(R+r)} \leq 1$
+    
+    We must have $r \leq 1-R$ and $\lvert \rho(\xi) \rvert^2 = \tfrac{(1-2r-R)^2(4r^2+4Rr-R^2)+4r(R+2r)^2(R+r)}{4r(R+r)} \leq 1$ such that the scheme is stable.
+\end{answer}
